@@ -17,15 +17,13 @@ Example HTTP GET Request takes 3 parametrs:
 
 <metric path> <metric value> <metric timestamp>
 
-Example: http://0.0.0.0:2008/feed/some-metrics/200/1444159516
+Example: http://0.0.0.0:2008/feed/some-metrics/5/1444159516
 
 RAW data are send to port 2003: as "some-metrics 5 1444159516"
-If timestamp is not defined, HTTP server uses the current local timestamp.
+If timestamp is not defined as part of URL, HTTP server uses the current local timestamp.
 
-So you can feed the data with like:
+So you can feed the data without timestamp, like:
 http://0.0.0.0:2008/feed/some-metrics/5
-
-The result will make 
 
 
 
