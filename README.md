@@ -25,6 +25,8 @@ If timestamp is not defined as part of URL, HTTP server uses the current local t
 So you can feed the data without timestamp, like:
 http://0.0.0.0:2008/feed/some-metrics/5
 
+The example result is:
+![example_result](https://raw.githubusercontent.com/ggtd/HTTP-Metric-transport-for-Graphite/master/img_for_readme/example_some-metric.png)
 
 
 See also:
