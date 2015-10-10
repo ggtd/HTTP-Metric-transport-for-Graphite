@@ -30,7 +30,5 @@ The example result is:
 
 
 See also:
-http://graphite.wikidot.com/
-http://graphite.readthedocs.org/en/1.0/feeding-carbon.html
-http://graphite.readthedocs.org/en/1.0/index.html
-
+* http://graphite.wikidot.com/
+* http://graphite.readthedocs.org/en/1.0/feeding-carbon.html
