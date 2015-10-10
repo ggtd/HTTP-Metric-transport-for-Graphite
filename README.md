@@ -17,17 +17,17 @@ This method gives you some advantages over the RAW data sending:
 
 # usage:
 
-Example HTTP GET Request takes 3 parametrs:
+First set the HOST/IP of the target carbon host in "carbon-http-srv.py"
+RUN ./carbon-http-srv.py
 
-<metric path> <metric value> <metric timestamp>
-
+Make HTTP GET request to feed carbon with metrics data.
 Example: http://0.0.0.0:2008/feed/some-metrics/5/1444159516
 
 RAW data are send to port 2003: as "some-metrics 5 1444159516"
 If timestamp is not defined as part of URL, HTTP server uses the current local timestamp.
 
 So you can feed the data without timestamp, like:
-http://0.0.0.0:2008/feed/some-metrics/5
+http://0.0.0.0:2008/feed/some-metrics/7
 
 The example result is:
 ![example_result](https://raw.githubusercontent.com/ggtd/HTTP-Metric-transport-for-Graphite/master/img_for_readme/example_some-metric.png)
