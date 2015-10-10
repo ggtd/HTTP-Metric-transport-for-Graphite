@@ -1,6 +1,6 @@
 # HTTP Metric transport for Graphite/Carbon
 
-Python HTTP server that accept metric data via HTTP, and forwards them as raw data, to Graphite/Carbon (TCP port 2003).
+Python HTTP server that accept metric data via HTTP, and forwards it as raw data, to Graphite/Carbon (TCP port 2003).
 
 Why to want send data via HTTP?
 This method gives you some advantages over the RAW data sending:
@@ -10,6 +10,10 @@ This method gives you some advantages over the RAW data sending:
 * Security ( Authentification *TODO)
 * IP Restrictions on application level (*TODO)
 * Anonymity (you see HTTP/HTTPS traffic and protocol)
+
+#Requirements
+* Python
+* CherryPy
 
 # usage:
 
