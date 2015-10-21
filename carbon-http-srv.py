@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #######################################################
 # Title: HTTP Metric transport for Graphite/Carbon
-# Version: 0.02dev
+# Version: 0.02
 # by : Tomas Dobrotka [ www.dobrotka.sk ]
 # support: tomas@dobrotka.sk
 #######################################################
@@ -15,6 +15,23 @@ HOST = '192.168.2.175'
 PORT = 2003
 
 IMPULSE_COUNTER_HOLDER={}
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+
+    def disable(self):
+        self.HEADER = ''
+        self.OKBLUE = ''
+        self.OKGREEN = ''
+        self.WARNING = ''
+        self.FAIL = ''
+        self.ENDC = ''
+
 
 #set config for HTTP server
 config = {
@@ -40,6 +57,15 @@ from threading import Thread
 from time import sleep
 
 
+def write_raw_metric(mpath,mvalue,mtimestamp):
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.connect((HOST, PORT))
+	DATA=str(mpath)+" "+str(mvalue)+" "+str(mtimestamp)+"\n"
+	s.send(DATA)
+	s.close()
+	print bcolors.OKGREEN+">>> [Metrics stored]"+bcolors.ENDC+" (mpath="+str(mpath)+",mvalue="+str(mvalue)+",mtimestamp="+str(mtimestamp)+") [host="+str(HOST)+",port="+str(PORT)+"]"
+    
+
 class carbonhttp:
 
     @http.expose
@@ -47,7 +73,8 @@ class carbonhttp:
 	if mtimestamp=="":
 	    mtimestamp=int(time.time())
 	
-	print "<<< [Metrics recieved] (mpath="+str(mpath)+",mvalue="+str(mvalue)+",mtimestamp="+str(mtimestamp)+") [host="+str(HOST)+",port="+str(PORT)+"]"
+	print "<<< [Metrics recieved] (mpath="+str(mpath)+",mvalue="+str(mvalue)+",mtimestamp="+str(mtimestamp)+")"
+	write_raw_metric(mpath,mvalue,mtimestamp)
 
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.connect((HOST, PORT))
@@ -60,12 +87,13 @@ class carbonhttp:
 
     @http.expose
     def imp(self,mpath="",mvalue=1):
+	mtimestamp=int(time.time())
 	global IMPULSE_COUNTER_HOLDER
 	try:
 	    IMPULSE_COUNTER_HOLDER[str(mpath)]=IMPULSE_COUNTER_HOLDER[str(mpath)]+int(1)
 	except KeyError:
 	    IMPULSE_COUNTER_HOLDER[str(mpath)]=int(1)
-	print "<<< [Impulse recieved] (mpath="+str(mpath)+",mvalue="+str(mvalue)+") "+"Value: "+mpath+"=" +str(IMPULSE_COUNTER_HOLDER[str(mpath)])
+	print "\033[92m<<< [Impulse recieved] \033[0m (mpath="+str(mpath)+",mvalue="+str(mvalue)+") "+"Value: "+mpath+"=" +str(IMPULSE_COUNTER_HOLDER[str(mpath)])
 
 	return 'ok'
 
@@ -74,27 +102,30 @@ class carbonhttp:
 	return("")
 
 
+def http_server():
+    http.quickstart( carbonhttp(),'/',config)
+
+
 def bacground_counter(period):
     tmp_period=period
     while 1:
 	tmp_period=(int(tmp_period)-1)
 	if (tmp_period==0):
 	    tmp_period=period
-    	    print ">>> [FLUSH Impulse Conuter Holders] ["+str(period)+" seconds]"
-	    print "--------------"
+	    mtimestamp=int(time.time())
+	    print bcolors.OKGREEN+">>> --- Flushing Counters into Carbon host -----"+bcolors.ENDC
 	    for METRICS in IMPULSE_COUNTER_HOLDER:
-		print str(METRICS)+"="+str(IMPULSE_COUNTER_HOLDER[METRICS])
-	    print "--------------"
+		write_raw_metric(METRICS,IMPULSE_COUNTER_HOLDER[METRICS],mtimestamp)
+		IMPULSE_COUNTER_HOLDER[METRICS]=0
+	    print bcolors.OKGREEN+"------------------------------------------------"+bcolors.ENDC
     	sleep(1)
 
 if __name__ == "__main__":
-    thread = Thread(target = bacground_counter, args = (10, ))
-    thread.start()
-#    thread.join()
 
-#    http.config.update( {'server.socket_host':"0.0.0.0", 'server.socket_port':2008} )
-    http.quickstart( carbonhttp(),'/',config)
-
+    thread_counter = Thread(target = bacground_counter, args = (60, ))
+    thread_counter.start()
+    thread_http = Thread(target = http_server)
+    thread_http.start()
 
 
 
