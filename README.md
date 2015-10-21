@@ -44,7 +44,13 @@ ctrl+] Todo: (fix make normal quit)
 
 
 
-#ver.02 (21.10.2015)
+#ver 0.03 (21.10.2015)
+New Feature: Event Differential time
+example: http://127.0.0.1:2008/tdiff/some_event/  Store time difference between two events(requests). Result metrics is in seconds.
+
+
+
+#ver 0.02 (21.10.2015)
 New Feature: Impulse counter (or Agregated conter)
 
 Impulse Counter is a feature that let you count some event, rather then sending metric data value.

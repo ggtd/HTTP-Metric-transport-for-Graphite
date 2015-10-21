@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #######################################################
 # Title: HTTP Metric transport for Graphite/Carbon
-# Version: 0.02
+# Version: 0.03
 # by : Tomas Dobrotka [ www.dobrotka.sk ]
 # support: tomas@dobrotka.sk
 #######################################################
@@ -15,6 +15,7 @@ HOST = '192.168.2.175'
 PORT = 2003
 
 IMPULSE_COUNTER_HOLDER={}
+TIME_DIFF_HOLDER={}
 
 class bcolors:
     HEADER = '\033[95m'
@@ -96,6 +97,22 @@ class carbonhttp:
 	print "\033[92m<<< [Impulse recieved] \033[0m (mpath="+str(mpath)+",mvalue="+str(mvalue)+") "+"Value: "+mpath+"=" +str(IMPULSE_COUNTER_HOLDER[str(mpath)])
 
 	return 'ok'
+
+    @http.expose
+    def tdiff(self,mpath=""):
+	mtimestamp=int(time.time())
+	global TIME_DIFF_HOLDER
+	try:
+	    if TIME_DIFF_HOLDER[str(mpath)]<>"":
+		DIFF=time.time()-TIME_DIFF_HOLDER[str(mpath)]
+		TIME_DIFF_HOLDER[str(mpath)]=time.time()
+		print "\033[92m<<< [Time Different event] \033[0m (mpath="+str(mpath)+",differential="+str(DIFF)+") "
+		write_raw_metric(mpath,DIFF,mtimestamp)
+	except KeyError:
+	    TIME_DIFF_HOLDER[str(mpath)]=time.time()
+	    print "\033[92m<<< [Time Different event] \033[0m (mpath="+str(mpath)+" - FIRST CHECKOPINT) "
+	return 'ok'
+
 
     @http.expose
     def index(self):
