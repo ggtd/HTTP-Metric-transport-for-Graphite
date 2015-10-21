@@ -36,3 +36,35 @@ The example result is:
 See also:
 * http://graphite.wikidot.com/
 * http://graphite.readthedocs.org/en/1.0/feeding-carbon.html
+
+#News
+
+
+
+#ver.02dev (21.10.2015)
+New Feature: Impulse counter (or Agregated conter)
+
+Impulse Counter is a feature that let you count some event, rather then sending metric data value.
+The counter will flush the counted(or agregated)  data values  and transport the metrics to Graphite/Carbon in preset time. (Default 60 seconds)
+
+Example:
+Call this HTTP request 4x each minute.
+http://127.0.0.1:2008/imp/counting_sheeps/1
+
+Result:
+Each minute a metric called “counting_sheeps” with value 4 is pushed into Carbon. This way you can measure the number of events in a time frame, rather that store just metrics values.
+
+
+Value Agregation Counter
+It’s the same like “Impuse Counter”, but allows you also to, count agregated values from events.
+
+Example:
+If you do thous two requests, within the same minute (period):
+http://127.0.0.1:2008/imp/counting_sheeps/10
+http://127.0.0.1:2008/imp/counting_sheeps/7
+
+At the time HH:mm:00 time the daemon sends a metric to Carbon, called “counting_sheeps” with value 17.
+
+
+
+
