@@ -65,8 +65,10 @@ It’s the same like “Impuse Counter”, but allows you also, to count/store a
 
 Example:
 -------
-If you do thous two requests, within the same minute (period):
+If you do two requests, within the same minute (period):
+
 http://127.0.0.1:2008/imp/counting_sheeps/10
+
 http://127.0.0.1:2008/imp/counting_sheeps/7
 
 Result: On end of time period, the daemon sends counted/agregateda metric values to Carbon, called “counting_sheeps” with value 17.
