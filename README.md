@@ -21,13 +21,13 @@ First set the HOST/IP of the target carbon host in "carbon-http-srv.py"
 RUN ./carbon-http-srv.py
 
 Make HTTP GET request to feed carbon with metrics data.
-Example: http://0.0.0.0:2008/feed/some-metrics/5/1444159516
+Example: http://127.0.0.1:2008/feed/some-metrics/5/1444159516
 
 RAW data are send to port 2003: as "some-metrics 5 1444159516"
 If timestamp is not defined as part of URL, HTTP server uses the current local timestamp.
 
 So you can feed the data without timestamp, like:
-http://0.0.0.0:2008/feed/some-metrics/7
+http://127.0.0.1:2008/feed/some-metrics/7
 
 The example result is:
 ![example_result](https://raw.githubusercontent.com/ggtd/HTTP-Metric-transport-for-Graphite/master/img_for_readme/example_some-metric.png)
@@ -46,7 +46,7 @@ ctrl+] Todo: (fix make normal quit)
 
 #ver 0.03 (21.10.2015)
 New Feature: Event Differential time
-example: http://127.0.0.1:2008/tdiff/some_event/  Store time difference between two events(requests). Result metrics is in seconds.
+example: http://127.0.0.1:2008/tdiff/event_name/  ,Store time difference between two events(requests). Result metrics is in seconds.
 
 
 
