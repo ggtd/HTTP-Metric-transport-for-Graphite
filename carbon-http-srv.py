@@ -11,7 +11,7 @@
 ############################################################
 
 #set the hostname and port of Carbon listener
-HOST = '192.168.2.175'
+HOST = '127.0.0.1'
 PORT = 2003
 
 IMPULSE_COUNTER_HOLDER={}
