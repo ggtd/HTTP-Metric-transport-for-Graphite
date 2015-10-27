@@ -78,3 +78,21 @@ http://127.0.0.1:2008/imp/counting_sheeps/10
 http://127.0.0.1:2008/imp/counting_sheeps/7
 
 Result: On end of time period, the daemon sends counted/agregateda metric values to Carbon, called “counting_sheeps” with value 17.
+
+
+#ver 0.00 - 0.01 (10.10.2015)
+* Initial release
+* HTTP Metric transport proxy for Carbon.
+
+#TODO:
+* To polish documentation and examples
+* Authentification
+* Re-think time preiod counting. Separate time for each object/event. ()
+* API/GUI/Frontend Dashboard
+* Verbosity options/settings or selection
+* Add better login verbose/functions. Separate Loging to log files.
+* Setting to ignore Zervo-Value impulse
+* Self hosted usage-monitoring analys and graphing.
+
+
+ 
