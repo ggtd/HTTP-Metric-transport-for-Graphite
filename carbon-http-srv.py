@@ -73,7 +73,7 @@ def write_raw_metric(mpath,mvalue,mtimestamp):
 	DATA=str(mpath)+" "+str(mvalue)+" "+str(mtimestamp)+"\n"
 	s.send(DATA)
 	s.close()
-	print bcolors.OKGREEN+">>> [Metrics stored]"+bcolors.ENDC+" (mpath="+str(mpath)+",mvalue="+str(mvalue)+",mtimestamp="+str(mtimestamp)+") [host="+str(HOST)+",port="+str(PORT)+"]"
+	print bcolors.OKGREEN+">>> [Metrics stored]"+bcolors.ENDC+" (mpath="+str(mpath)+",mvalue="+str(mvalue)+",mtimestamp="+str(mtimestamp)+") [host="+str(CARBON_HOST)+",port="+str(CARBON_HOST)+"]"
     
 
 class carbonhttp:
@@ -85,12 +85,6 @@ class carbonhttp:
 	
 	print "<<< [Metrics recieved] (mpath="+str(mpath)+",mvalue="+str(mvalue)+",mtimestamp="+str(mtimestamp)+")"
 	write_raw_metric(mpath,mvalue,mtimestamp)
-
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect((HOST, PORT))
-	DATA=str(mpath)+" "+str(mvalue)+" "+str(mtimestamp)+"\n"
-	s.send(DATA)
-	s.close()
 	
 	if output=="img":
 	    http.response.headers['Content-Type'] = "image/gif"
