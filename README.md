@@ -44,7 +44,9 @@ ctrl+] Todo: (fix make normal quit)
 
 #ver 0.04 (5.2.2016)
 New Feature: Can response with image. See (?output=img)
+
 Updated: Proper usage of config HOST and PORT for HTTP
+
 example: http://0.0.0.0:2003/tdiff/event_name/  ,Store time difference between two events(requests). Result metrics is in seconds.
 
 
