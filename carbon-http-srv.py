@@ -11,11 +11,15 @@
 ############################################################
 
 #set the hostname and port of Carbon listener
-HOST = '127.0.0.1'
-PORT = 2003
+HOST = '0.0.0.0'
+PORT = 3088
 
 IMPULSE_COUNTER_HOLDER={}
 TIME_DIFF_HOLDER={}
+
+
+GIF_IMG_SOURCE='R0lGODlhAQABAIABAP///wAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+
 
 class bcolors:
     HEADER = '\033[95m'
@@ -37,17 +41,17 @@ class bcolors:
 #set config for HTTP server
 config = {
   'global' : {
-    'server.socket_host' : '0.0.0.0',
-    'server.socket_port' : 2008,
+    'server.socket_host' : HOST,
+    'server.socket_port' : PORT,
     'server.thread_pool' : 8,
 
 
-#configure HTTPs
-#    'server.ssl_module'            : 'pyopenssl',
-#    'server.ssl_certificate'       : './ssl/server.crt',
-#    'server.ssl_certificate_chain' : './ssl/server.pem',
-#    'server.ssl_private_key'       : './ssl/server.key',
-#    'request.error_response': 'return_error',
+    #configure HTTPs
+    'server.ssl_module'            : 'pyopenssl',
+    'server.ssl_certificate'       : './ssl/server.crt',
+    'server.ssl_certificate_chain' : './ssl/server.pem',
+    'server.ssl_private_key'       : './ssl/server.key',
+    'request.error_response': 'return_error',
 }
 }
 
@@ -70,7 +74,7 @@ def write_raw_metric(mpath,mvalue,mtimestamp):
 class carbonhttp:
 
     @http.expose
-    def feed(self,mpath="",mvalue="",mtimestamp=""):
+    def feed(self,mpath="",mvalue="",mtimestamp="",output=""):
 	if mtimestamp=="":
 	    mtimestamp=int(time.time())
 	
@@ -83,11 +87,15 @@ class carbonhttp:
 	s.send(DATA)
 	s.close()
 	
-	return 'ok'
+	if output=="img":
+	    http.response.headers['Content-Type'] = "image/gif"
+	    return GIF_IMG_SOURCE.decode('base64')
+	else:
+	    return 'ok'
 
 
     @http.expose
-    def imp(self,mpath="",mvalue=1):
+    def imp(self,mpath="",mvalue=1,output=""):
 	mtimestamp=int(time.time())
 	global IMPULSE_COUNTER_HOLDER
 	try:
@@ -96,10 +104,14 @@ class carbonhttp:
 	    IMPULSE_COUNTER_HOLDER[str(mpath)]=int(1)
 	print "\033[92m<<< [Impulse recieved] \033[0m (mpath="+str(mpath)+",mvalue="+str(mvalue)+") "+"Value: "+mpath+"=" +str(IMPULSE_COUNTER_HOLDER[str(mpath)])
 
-	return 'ok'
+	if output=="img":
+	    http.response.headers['Content-Type'] = "image/gif"
+	    return GIF_IMG_SOURCE.decode('base64')
+	else:
+	    return 'ok'
 
     @http.expose
-    def tdiff(self,mpath=""):
+    def tdiff(self,mpath="",output=""):
 	mtimestamp=int(time.time())
 	global TIME_DIFF_HOLDER
 	try:
@@ -111,7 +123,11 @@ class carbonhttp:
 	except KeyError:
 	    TIME_DIFF_HOLDER[str(mpath)]=time.time()
 	    print "\033[92m<<< [Time Different event] \033[0m (mpath="+str(mpath)+" - FIRST CHECKOPINT) "
-	return 'ok'
+	if output=="img":
+	    http.response.headers['Content-Type'] = "image/gif"
+	    return GIF_IMG_SOURCE.decode('base64')
+	else:
+	    return 'ok'
 
 
     @http.expose
