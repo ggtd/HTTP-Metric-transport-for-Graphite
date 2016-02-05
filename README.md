@@ -21,13 +21,13 @@ First set the HOST/IP of the target carbon host in "carbon-http-srv.py"
 RUN ./carbon-http-srv.py
 
 Make HTTP GET request to feed carbon with metrics data.
-Example: http://0.0.0.0:2003/feed/some-metrics/5/1444159516
+Example: http://0.0.0.0:2008/feed/some-metrics/5/1444159516
 
 RAW data are send to port 2003: as "some-metrics 5 1444159516"
 If timestamp is not defined as part of URL, HTTP server uses the current local timestamp.
 
 So you can feed the data without timestamp, like:
-http://0.0.0.0:2003/feed/some-metrics/7
+http://0.0.0.0:2008/feed/some-metrics/7
 
 The example result is:
 ![example_result](https://raw.githubusercontent.com/ggtd/HTTP-Metric-transport-for-Graphite/master/img_for_readme/example_some-metric.png)
@@ -47,13 +47,13 @@ New Feature: Can response with image. See (?output=img)
 
 Updated: Proper usage of config HOST and PORT for HTTP
 
-example: http://0.0.0.0:2003/tdiff/event_name/  ,Store time difference between two events(requests). Result metrics is in seconds.
+example: http://0.0.0.0:2008/tdiff/event_name/  ,Store time difference between two events(requests). Result metrics is in seconds.
 
 
 
 #ver 0.03 (21.10.2015)
 New Feature: Event Differential time
-example: http://0.0.0.0:2003/tdiff/event_name/  ,Store time difference between two events(requests). Result metrics is in seconds.
+example: http://0.0.0.0:2008/tdiff/event_name/  ,Store time difference between two events(requests). Result metrics is in seconds.
 
 
 
@@ -66,7 +66,7 @@ The counter will flush the counted(or agregated)  data values  and transport the
 Example:
 --------
 Call this HTTP request 4x in a row.
-http://0.0.0.0:2003/imp/counting_sheeps/1
+http://0.0.0.0:2008/imp/counting_sheeps/1
 
 Result:
 -------
@@ -80,9 +80,9 @@ Example:
 -------
 If you do two requests, within the same minute (period):
 
-http://0.0.0.0:2003/imp/counting_sheeps/10
+http://0.0.0.0:2008/imp/counting_sheeps/10
 
-http://0.0.0.0:2003/imp/counting_sheeps/7
+http://0.0.0.0:2008/imp/counting_sheeps/7
 
 Result: On end of time period, the daemon sends counted/agregateda metric values to Carbon, called “counting_sheeps” with value 17.
 

@@ -11,8 +11,13 @@
 ############################################################
 
 #set the hostname and port of Carbon listener
-HOST = '0.0.0.0'
-PORT = 3088
+HTTP_HOST = '0.0.0.0'
+HTTP_PORT = 2008
+
+CARBON_HOST='127.0.0.1'
+CARBON_PORT=2003
+
+
 
 IMPULSE_COUNTER_HOLDER={}
 TIME_DIFF_HOLDER={}
@@ -41,17 +46,17 @@ class bcolors:
 #set config for HTTP server
 config = {
   'global' : {
-    'server.socket_host' : HOST,
-    'server.socket_port' : PORT,
+    'server.socket_host' : HTTP_HOST,
+    'server.socket_port' : HTTP_PORT,
     'server.thread_pool' : 8,
 
 
     #configure HTTPs
-    'server.ssl_module'            : 'pyopenssl',
-    'server.ssl_certificate'       : './ssl/server.crt',
-    'server.ssl_certificate_chain' : './ssl/server.pem',
-    'server.ssl_private_key'       : './ssl/server.key',
-    'request.error_response': 'return_error',
+#    'server.ssl_module'            : 'pyopenssl',
+#    'server.ssl_certificate'       : './ssl/server.crt',
+#    'server.ssl_certificate_chain' : './ssl/server.pem',
+#    'server.ssl_private_key'       : './ssl/server.key',
+#    'request.error_response': 'return_error',
 }
 }
 
@@ -64,7 +69,7 @@ from time import sleep
 
 def write_raw_metric(mpath,mvalue,mtimestamp):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect((HOST, PORT))
+	s.connect((CARBON_HOST, CARBON_PORT))
 	DATA=str(mpath)+" "+str(mvalue)+" "+str(mtimestamp)+"\n"
 	s.send(DATA)
 	s.close()
